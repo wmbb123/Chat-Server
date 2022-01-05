@@ -1,6 +1,7 @@
 #include "client.h"
 #include "ui_client.h"
 #include <thread>
+
 Client::Client(QWidget *parent) : QMainWindow(parent), ui(new Ui::Client)
 {
     ui->setupUi(this);
@@ -132,45 +133,6 @@ void Client::sendmess() {
     else
         QMessageBox::critical(this,"QTCPClient","Not connected");
 
-}
-
-void Client::on_pushButton_sendAttachment_clicked()
-{
-    if(socket)
-    {
-        if(socket->isOpen())
-        {
-            QString filePath = QFileDialog::getOpenFileName(this, ("Select an attachment"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), ("File (*.json *.txt *.png *.jpg *.jpeg)"));
-
-            if(filePath.isEmpty()){
-                QMessageBox::critical(this,"QTCPClient","You haven't selected any attachment!");
-                return;
-            }
-
-            QFile m_file(filePath);
-            if(m_file.open(QIODevice::ReadOnly)){
-
-                QFileInfo fileInfo(m_file.fileName());
-                QString fileName(fileInfo.fileName());
-
-                QDataStream socketStream(socket);
-
-                QByteArray header;
-                header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(fileName).arg(m_file.size()).toUtf8());
-                header.resize(128);
-
-                QByteArray byteArray = m_file.readAll();
-                byteArray.prepend(header);
-
-                socketStream << byteArray;
-            }else
-                QMessageBox::critical(this,"QTCPClient","Attachment is not readable!");
-        }
-        else
-            QMessageBox::critical(this,"QTCPClient","Socket doesn't seem to be opened");
-    }
-    else
-        QMessageBox::critical(this,"QTCPClient","Not connected");
 }
 
 void Client::displayMessage(const QString& str)

@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include "client.h"
 #include "server.h"
+
 namespace Ui {
 class Homepage;
 }
@@ -21,18 +22,17 @@ public:
     ~Homepage();
 
 private slots:
-    void on_pushButton_display_clicked();
-
-    void on_pushButton_server_clicked();
 
     void on_pushButton_client_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::Homepage *ui;
     QSqlDatabase database;
     QSqlQueryModel *querymodel;
     Client *client;
-    Server *server;
+    //Server *server;
 };
 
 #endif // HOMEPAGE_H

@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    admin.cpp \
     client.cpp \
     homepage.cpp \
     main.cpp \
@@ -23,12 +24,14 @@ SOURCES += \
     server.cpp
 
 HEADERS += \
+    admin.h \
     client.h \
     homepage.h \
     mainwindow.h \
     server.h
 
 FORMS += \
+    admin.ui \
     client.ui \
     homepage.ui \
     mainwindow.ui \

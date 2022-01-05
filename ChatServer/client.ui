@@ -1,15 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>Client</class>
- <widget name="Client" class="QMainWindow">
+ <widget class="QMainWindow" name="Client">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>599</width>
-    <height>449</height>
+    <width>451</width>
+    <height>367</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,33 +21,13 @@
     <item row="0" column="0">
      <widget class="QTextBrowser" name="textBrowser_receivedMessages">
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <widget class="QPushButton" name="pushButton_sendMessage">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>Send Message</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="pushButton_sendAttachment">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>Send Attachment</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2">
+      <item row="2" column="1">
        <widget class="QLineEdit" name="lineEdit_message">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -58,11 +36,21 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
         </property>
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pushButton_sendMessage">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(233, 185, 110);</string>
+      </property>
+      <property name="text">
+       <string>Send Message</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -71,7 +59,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>599</width>
+     <width>451</width>
      <height>22</height>
     </rect>
    </property>
@@ -90,4 +78,3 @@
  <resources/>
  <connections/>
 </ui>
-

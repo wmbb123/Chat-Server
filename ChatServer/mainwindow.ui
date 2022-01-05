@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
-    <height>409</height>
+    <width>487</width>
+    <height>433</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <x>40</x>
       <y>50</y>
       <width>401</width>
-      <height>301</height>
+      <height>331</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -153,6 +153,19 @@ border-radius: 8px;</string>
        <string>Create an Account</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="Registertxt">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>260</y>
+        <width>89</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Reg</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -242,6 +255,19 @@ border-radius: 8px;</string>
        <string>Sign into Account</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="Logintxt">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>220</y>
+        <width>89</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Log</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="label_7">
@@ -266,7 +292,7 @@ border-radius: 8px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>475</width>
+     <width>487</width>
      <height>22</height>
     </rect>
    </property>

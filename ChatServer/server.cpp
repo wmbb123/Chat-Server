@@ -71,28 +71,7 @@ void Server::readSocket()
     QString fileType = header.split(",")[0].split(":")[1];
 
     buffer = buffer.mid(128);
-
-    if(fileType=="attachment"){
-        QString fileName = header.split(",")[1].split(":")[1];
-        QString ext = fileName.split(".")[1];
-        QString size = header.split(",")[2].split(":")[1].split(";")[0];
-
-        if (QMessageBox::Yes == QMessageBox::question(this, "QTCPServer", QString("You are receiving an attachment from sd:%1 of size: %2 bytes, called %3. Do you want to accept it?").arg(socket->socketDescriptor()).arg(size).arg(fileName)))
-        {
-            QString filePath = QFileDialog::getSaveFileName(this, tr("Save File"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/"+fileName, QString("File (*.%1)").arg(ext));
-
-            QFile file(filePath);
-            if(file.open(QIODevice::WriteOnly)){
-                file.write(buffer);
-                QString message = QString("INFO :: Attachment from sd:%1 successfully stored on disk under the path %2").arg(socket->socketDescriptor()).arg(QString(filePath));
-                emit newMessage(message);
-            }else
-                QMessageBox::critical(this,"QTCPServer", "An error occurred while trying to write the attachment.");
-        }else{
-            QString message = QString("INFO :: Attachment from sd:%1 discarded").arg(socket->socketDescriptor());
-            emit newMessage(message);
-        }
-    }else if(fileType=="message"){
+    if(fileType=="message"){
         QString message = QString("%1 :: %2").arg(socket->socketDescriptor()).arg(QString::fromStdString(buffer.toStdString()));
         emit newMessage(message);
     }
@@ -160,39 +139,6 @@ void Server::sendmess(){
 
 }
 
-
-void Server::on_pushButton_sendAttachment_clicked()
-{
-    QString receiver = ui->comboBox_receiver->currentText();
-
-    QString filePath = QFileDialog::getOpenFileName(this, ("Select an attachment"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), ("File (*.json *.txt *.png *.jpg *.jpeg)"));
-
-    if(filePath.isEmpty()){
-        QMessageBox::critical(this,"QTCPClient","You haven't selected any attachment!");
-        return;
-    }
-
-    if(receiver=="Broadcast")
-    {
-        foreach (QTcpSocket* socket,connection_set)
-        {
-            sendAttachment(socket, filePath);
-        }
-    }
-    else
-    {
-        foreach (QTcpSocket* socket,connection_set)
-        {
-            if(socket->socketDescriptor() == receiver.toLongLong())
-            {
-                sendAttachment(socket, filePath);
-                break;
-            }
-        }
-    }
-    ui->lineEdit_message->clear();
-}
-
 void Server::sendMessage(QTcpSocket* socket)
 {
     if(socket)
@@ -211,38 +157,6 @@ void Server::sendMessage(QTcpSocket* socket)
             byteArray.prepend(header);
 
             socketStream << byteArray;
-        }
-        else
-            QMessageBox::critical(this,"QTCPServer","Socket doesn't seem to be opened");
-    }
-    else
-        QMessageBox::critical(this,"QTCPServer","Not connected");
-}
-
-void Server::sendAttachment(QTcpSocket* socket, QString filePath)
-{
-    if(socket)
-    {
-        if(socket->isOpen())
-        {
-            QFile m_file(filePath);
-            if(m_file.open(QIODevice::ReadOnly)){
-
-                QFileInfo fileInfo(m_file.fileName());
-                QString fileName(fileInfo.fileName());
-
-                QDataStream socketStream(socket);
-
-                QByteArray header;
-                header.prepend(QString("fileType:attachment,fileName:%1,fileSize:%2;").arg(fileName).arg(m_file.size()).toUtf8());
-                header.resize(128);
-
-                QByteArray byteArray = m_file.readAll();
-                byteArray.prepend(header);
-
-                socketStream << byteArray;
-            }else
-                QMessageBox::critical(this,"QTCPClient","Couldn't open the attachment!");
         }
         else
             QMessageBox::critical(this,"QTCPServer","Socket doesn't seem to be opened");

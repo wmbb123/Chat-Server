@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include "homepage.h"
+#include "admin.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,5 +30,6 @@ private:
     Ui::MainWindow *ui;
     QSqlDatabase database;
     Homepage *homepage;
+    Admin *admin;
 };
 #endif // MAINWINDOW_H

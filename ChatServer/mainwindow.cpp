@@ -5,6 +5,11 @@
 //#include <QFile>
 //#include <QTextStream>
 #include <QString>
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -76,6 +81,16 @@ void MainWindow::on_pushButton_clicked()
 
     QString usernameL = ui->lineEdit_usernameL->text();
     QString passwordL = ui->lineEdit_passwordL->text();
+
+    if(usernameL == "admin" && passwordL == "admin"){
+        QMessageBox::information(this, "Success", "Login to Admin");
+        hide();
+        //Admin admin;
+        //admin.setModal(true);
+        //admin.exec();
+        admin = new Admin(this);
+        admin->show();
+    }
 
     if (database.open()){
         //QMessageBox::information(this, "Database Success", "Database Connection Successful");
