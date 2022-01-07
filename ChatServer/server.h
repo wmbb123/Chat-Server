@@ -21,7 +21,7 @@ class Server : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Server(QWidget *parent = nullptr);
+    explicit Server(QString usernameL, QString passwordL, QWidget *parent = nullptr);
     ~Server();
 
 signals:
@@ -45,8 +45,10 @@ private slots:
 
 private:
     Ui::Server *ui;
-    QTcpServer* m_server;
-    QSet<QTcpSocket*> connection_set;
+    QTcpServer* serv;
+    QSet<QTcpSocket*> conn;
+    QString usernameL;
+    QString passwordL;
 };
 
 #endif // SERVER_H

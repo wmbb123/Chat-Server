@@ -11,11 +11,13 @@
 #include <QSqlQuery>
 #include <QDebug>
 
-Admin::Admin(QWidget *parent) :
+Admin::Admin(QString usernameL, QString passwordL, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Admin)
 {
     ui->setupUi(this);
+    this->usernameL = usernameL;
+    this->passwordL = passwordL;
 }
 
 Admin::~Admin()
@@ -25,13 +27,13 @@ Admin::~Admin()
 
 void Admin::on_pushButton_clicked()
 {
-    server = new Server(this);
+    server = new Server(usernameL, passwordL);
     server->show();
 }
 
 void Admin::on_pushButton_2_clicked()
 {
-    client = new Client(this);
+    client = new Client(usernameL, passwordL);
     client->show();
 }
 

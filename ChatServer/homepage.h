@@ -18,7 +18,7 @@ class Homepage : public QDialog
     Q_OBJECT
 
 public:
-    explicit Homepage(QWidget *parent = nullptr);
+    explicit Homepage(QString usernameL, QString passwordL, QWidget *parent = nullptr);
     ~Homepage();
 
 private slots:
@@ -33,6 +33,8 @@ private:
     QSqlQueryModel *querymodel;
     Client *client;
     //Server *server;
+    QString usernameL;
+    QString passwordL;
 };
 
 #endif // HOMEPAGE_H

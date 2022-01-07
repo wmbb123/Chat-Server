@@ -11,12 +11,16 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
+#include <QTextEdit>
 
-Homepage::Homepage(QWidget *parent) :
+Homepage::Homepage(QString usernameL, QString passwordL, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Homepage)
 {
     ui->setupUi(this);
+    this->usernameL = usernameL;
+    this->passwordL = passwordL;
+
 }
 
 Homepage::~Homepage()
@@ -26,20 +30,42 @@ Homepage::~Homepage()
 
 void Homepage::on_pushButton_client_clicked()
 {
-    client = new Client(this);
+    client = new Client(usernameL, passwordL);
     client->show();
 }
 
 void Homepage::on_pushButton_clicked()
 {
-    database = QSqlDatabase::addDatabase("QMYSQL");
+    database = QSqlDatabase::addDatabase("QMYSQL", "MyConnect");
     database.setHostName("127.0.0.1");
     database.setUserName("admin");
     database.setPassword("pvcSGmQ2REna");
     database.setDatabaseName("DatabaseChatServer");
-    if(database.open()) {
 
+    ui->textEdit->setText(usernameL);
+    ui->textEdit_2->setText(passwordL);
 
-    database.close();
+    //if(database.open()) {
+        /*QSqlQuery query(QSqlDatabase::database("MyConnect"));
+        query.prepare(QString("SELECT * FROM users WHERE username = :username AND password = :password"));
+
+        query.bindValue(":username", usernameL);
+        query.bindValue(":password", passwordL);
+
+        if(!query.exec()) {
+            QMessageBox::information(this, "Failed", "Query Failed To Execute");
+        }
+        else
+        {
+            while (query.next()) {
+                QString usernameFromDB = query.value(1).toString();
+                QString passwordFromDB = query.value(2).toString();
+        if(usernameFromDB == usernameL)
+        {
+
+        }
     }
+    database.close();
+    }*/
+  //}
 }

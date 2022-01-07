@@ -2,9 +2,11 @@
 #include "ui_client.h"
 #include <thread>
 
-Client::Client(QWidget *parent) : QMainWindow(parent), ui(new Ui::Client)
+Client::Client(QString usernameL, QString passwordL, QWidget *parent) : QMainWindow(parent), ui(new Ui::Client)
 {
     ui->setupUi(this);
+    this->usernameL = usernameL;
+    this->passwordL = passwordL;
     socket = new QTcpSocket(this);
 
     connect(this, &Client::newMessage, this, &Client::displayMessage);

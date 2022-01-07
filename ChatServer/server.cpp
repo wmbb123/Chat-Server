@@ -1,52 +1,53 @@
 #include "server.h"
 #include "ui_server.h"
-
-Server::Server(QWidget *parent) : QMainWindow(parent), ui(new Ui::Server)
+Server::Server(QString usernameL, QString passwordL, QWidget *parent) : QMainWindow(parent), ui(new Ui::Server)
 {
     ui->setupUi(this);
-    m_server = new QTcpServer();
+    this->usernameL = usernameL;
+    this->passwordL = passwordL;
+    serv = new QTcpServer();
 
-    if(m_server->listen(QHostAddress::Any, 8080))
+    if(serv->listen(QHostAddress::Any, 8080))
     {
        connect(this, &Server::newMessage, this, &Server::displayMessage);
-       connect(m_server, &QTcpServer::newConnection, this, &Server::newConnection);
+       connect(serv, &QTcpServer::newConnection, this, &Server::newConnection);
        ui->statusBar->showMessage("Server is listening...");
     }
     else
     {
-        QMessageBox::critical(this,"QTCPServer",QString("Unable to start the server: %1.").arg(m_server->errorString()));
+        QMessageBox::critical(this,"QTCPServer",QString("Unable to start the server: %1.").arg(serv->errorString()));
         exit(EXIT_FAILURE);
     }
 }
 
 Server::~Server()
 {
-    foreach (QTcpSocket* socket, connection_set)
+    foreach (QTcpSocket* socket, conn)
     {
         socket->close();
         socket->deleteLater();
     }
 
-    m_server->close();
-    m_server->deleteLater();
+    serv->close();
+    serv->deleteLater();
 
     delete ui;
 }
 
 void Server::newConnection()
 {
-    while (m_server->hasPendingConnections())
-        appendToSocketList(m_server->nextPendingConnection());
+    while (serv->hasPendingConnections())
+        appendToSocketList(serv->nextPendingConnection());
 }
 
 void Server::appendToSocketList(QTcpSocket* socket)
 {
-    connection_set.insert(socket);
+    conn.insert(socket);
     connect(socket, &QTcpSocket::readyRead, this, &Server::readSocket);
     connect(socket, &QTcpSocket::disconnected, this, &Server::discardSocket);
     //connect(socket, &QAbstractSocket::errorOccurred, this, &MainWindow::displayError);
     ui->comboBox_receiver->addItem(QString::number(socket->socketDescriptor()));
-    displayMessage(QString("INFO :: Client with sockd:%1 has just entered the room").arg(socket->socketDescriptor()));
+    displayMessage(QString("INFO :: Client with sockd:%1 has just entered the room").arg(socket->socketDescriptor())); //sockd:%1
 }
 
 void Server::readSocket()
@@ -62,6 +63,7 @@ void Server::readSocket()
 
     if(!socketStream.commitTransaction())
     {
+
         QString message = QString("%1 :: Waiting for more data to come..").arg(socket->socketDescriptor());
         emit newMessage(message);
         return;
@@ -80,10 +82,10 @@ void Server::readSocket()
 void Server::discardSocket()
 {
     QTcpSocket* socket = reinterpret_cast<QTcpSocket*>(sender());
-    QSet<QTcpSocket*>::iterator it = connection_set.find(socket);
-    if (it != connection_set.end()){
+    QSet<QTcpSocket*>::iterator it = conn.find(socket);
+    if (it != conn.end()){
         displayMessage(QString("INFO :: A client has just left the room").arg(socket->socketDescriptor()));
-        connection_set.remove(*it);
+        conn.remove(*it);
     }
     refreshComboBox();
 
@@ -110,7 +112,28 @@ void Server::displayError(QAbstractSocket::SocketError socketError)
 
 void Server::on_pushButton_sendMessage_clicked()
 {
-    sendmess();
+    QString receiver = ui->comboBox_receiver->currentText();
+
+    if(receiver=="Broadcast")
+    {
+        foreach (QTcpSocket* socket,conn)
+        {
+            sendMessage(socket);
+        }
+    }
+    else
+    {
+        foreach (QTcpSocket* socket,conn)
+        {
+            if(socket->socketDescriptor() == receiver.toLongLong())
+            {
+                sendMessage(socket);
+                break;
+            }
+        }
+    }
+    ui->lineEdit_message->clear();
+    //sendmess();
 }
 
 void Server::sendmess(){
@@ -118,14 +141,14 @@ void Server::sendmess(){
 
     if(receiver=="Broadcast")
     {
-        foreach (QTcpSocket* socket,connection_set)
+        foreach (QTcpSocket* socket,conn)
         {
             sendMessage(socket);
         }
     }
     else
     {
-        foreach (QTcpSocket* socket,connection_set)
+        foreach (QTcpSocket* socket,conn)
         {
             if(socket->socketDescriptor() == receiver.toLongLong())
             {
@@ -174,6 +197,6 @@ void Server::displayMessage(const QString& str)
 void Server::refreshComboBox(){
     ui->comboBox_receiver->clear();
     ui->comboBox_receiver->addItem("Broadcast");
-    foreach(QTcpSocket* socket, connection_set)
+    foreach(QTcpSocket* socket, conn)
         ui->comboBox_receiver->addItem(QString::number(socket->socketDescriptor()));
 }

@@ -17,10 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 {
     ui->setupUi(this);
-    //QPixmap pix("/home/ntu-user/Login/index.png");
-    //QPixmap pix2("/home/ntu-user/Login/colours.jpg");
-    //ui->label_pic->setPixmap(pix);
-    //ui->label_colour->setPixmap(pix2);
+
+
     ui->lineEdit_username->setPlaceholderText("Create A Username");
     ui->lineEdit_password->setPlaceholderText("Create A Password");
     ui->lineEdit_email->setPlaceholderText("Enter Your Email");
@@ -85,10 +83,7 @@ void MainWindow::on_pushButton_clicked()
     if(usernameL == "admin" && passwordL == "admin"){
         QMessageBox::information(this, "Success", "Login to Admin");
         hide();
-        //Admin admin;
-        //admin.setModal(true);
-        //admin.exec();
-        admin = new Admin(this);
+        admin = new Admin(usernameL, passwordL);
         admin->show();
     }
 
@@ -115,9 +110,9 @@ void MainWindow::on_pushButton_clicked()
                 {
                     QMessageBox::information(this, "Success", "Login Successful");
                     hide();
-                    Homepage homepage;
-                    homepage.setModal(true);
-                    homepage.exec();
+                    homepage = new Homepage(usernameL, passwordL);
+                    homepage->show();
+
                 }
                 else
                 {

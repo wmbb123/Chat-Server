@@ -13,6 +13,7 @@
 #include <QStandardPaths>
 #include <QTcpSocket>
 #include <QDataStream>
+#include <QTcpServer>
 
 namespace Ui {
 class Client;
@@ -23,7 +24,7 @@ class Client : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Client(QWidget *parent = nullptr);
+    explicit Client(QString usernameL, QString passwordL, QWidget *parent = nullptr);
     ~Client();
 
 signals:
@@ -41,6 +42,10 @@ private slots:
 private:
     Ui::Client *ui;
     QTcpSocket* socket;
+    QTcpServer* serv;
+    QSet<QTcpSocket*> conn;
+    QString usernameL;
+    QString passwordL;
 };
 
 #endif // CLIENT_H

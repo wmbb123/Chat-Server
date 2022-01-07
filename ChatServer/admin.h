@@ -18,7 +18,7 @@ class Admin : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Admin(QWidget *parent = nullptr);
+    explicit Admin(QString usernameL, QString passwordL, QWidget *parent = nullptr);
     ~Admin();
 
 private slots:
@@ -34,6 +34,8 @@ private:
     QSqlQueryModel *querymodel;
     Client *client;
     Server *server;
+    QString usernameL;
+    QString passwordL;
 };
 
 #endif // ADMIN_H
